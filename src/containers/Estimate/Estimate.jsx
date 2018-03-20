@@ -204,6 +204,23 @@ class Estimate extends React.Component {
                     }
                     break
                 }
+                case 'u': {
+                    // eslint-disable-next-line
+                    if (!confirm('Sure you want to reset items ids?')) { return }
+                    let id = 0
+                    const details = {}
+                    const { items } = this.state
+                    const change = nodes => nodes.map((node) => {
+                        id += 1
+                        details[id] = { ...this.state.details[node.id] }
+                        node.id = id // eslint-disable-line
+                        if (node.children) { change(node.children) }
+                        return node
+                    })
+                    change(items)
+                    this.updateStateWithItems([ ...items ], { details, collapsedItems: [] })
+                    break
+                }
                 default: {
                     // console.log(evt.key) // eslint-disable-line
                 } // eslint-disable-line
@@ -509,6 +526,7 @@ class Estimate extends React.Component {
                     {this.state.activeItem ? (
                         <Sidebar
                             {...this.state.details[this.state.activeItem]}
+                            id={this.state.activeItem}
                             updateField={this.updateDetailsField}
                             onEditStart={this.keyboardOff}
                             onEditEnd={this.keyboardOn}

@@ -42,8 +42,7 @@ class EstimateItemNode extends React.Component {
                 <div>
                     <span style={{ float: 'right', background: '#ddd' }}>{minutes(this.props.estimate)}</span>
                     <span onClick={this.props.onToggleCollapse}>{status}</span>
-                    <small>{this.props.id}</small>
-                    {` ${this.props.details.description}`}
+                    {this.props.details.description}
                 </div>
             )
 

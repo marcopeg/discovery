@@ -38,6 +38,7 @@ styles.notes = {
 }
 
 const Sidebar = ({
+    id,
     description,
     notes,
     updateField,
@@ -46,7 +47,7 @@ const Sidebar = ({
 }) => (
     <div style={styles.wrapper}>
         <div style={styles.main}>
-            <h3 style={styles.title}>{description}</h3>
+            <h3 style={styles.title}>{id} - {description}</h3>
             <textarea
                 style={styles.notes}
                 value={notes}
@@ -62,6 +63,7 @@ const Sidebar = ({
 )
 
 Sidebar.propTypes = {
+    id: PropTypes.number.isRequired,
     description: PropTypes.string,
     notes: PropTypes.string,
     updateField: PropTypes.func.isRequired,
