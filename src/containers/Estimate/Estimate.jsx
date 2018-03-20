@@ -27,6 +27,8 @@ import {
     injectNewItem,
 } from './utils/new-items'
 
+import { deleteActiveItem } from './utils/delete-item'
+
 import tree2array from './utils/tree2array'
 import tree2object from './utils/tree2object'
 import treeDeleteNode from './utils/tree-delete-node'
@@ -214,7 +216,7 @@ class Estimate extends React.Component {
                 }
                 case 'Backspace': {
                     if (!this.state.isEditMode) {
-                        this.deleteItem()
+                        deleteActiveItem(this)
                     }
                     break
                 }
@@ -321,40 +323,6 @@ class Estimate extends React.Component {
         setTimeout(() => {
             saveToBrowser(this)
             setTimeout(() => updateProjectUrl(this))
-        })
-    }
-
-    deleteItem = () => {
-        // eslint-disable-next-line
-        if (!confirm('remove it all?')) {
-            return
-        }
-
-        const {
-            details,
-            flatItemsMap,
-            activeItem,
-            collapsedItems,
-        } = this.state
-
-        const node = flatItemsMap[activeItem]
-        const subtree = tree2array(node.item.children)
-
-        // remove from tree
-        const items = treeDeleteNode(this.state.items, this.state.activeItem)
-        delete details[node.id]
-
-        for (const nodeId of subtree) {
-            delete details[nodeId]
-            const idx = collapsedItems.indexOf(nodeId)
-            if (idx !== -1) {
-                collapsedItems.splice(idx, 1)
-            }
-        }
-
-        this.updateStateWithItems(items, {
-            details,
-            collapsedItems,
         })
     }
 
