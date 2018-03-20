@@ -34,6 +34,8 @@ import {
     right as navigateRight,
 } from './utils/navigate'
 
+import { string2minutes } from './utils/minutes'
+
 import { deleteActiveItem } from './utils/delete-item'
 
 import tree2array from './utils/tree2array'
@@ -167,13 +169,17 @@ class Estimate extends React.Component {
                     break
                 }
                 case 'ArrowLeft': {
-                    evt.preventDefault()
-                    navigateLeft(this)
+                    if (!this.state.isEditMode) {
+                        evt.preventDefault()
+                        navigateLeft(this)
+                    }
                     break
                 }
                 case 'ArrowRight': {
-                    evt.preventDefault()
-                    navigateRight(this)
+                    if (!this.state.isEditMode) {
+                        evt.preventDefault()
+                        navigateRight(this)
+                    }
                     break
                 }
                 case 'Enter': {
@@ -418,15 +424,17 @@ class Estimate extends React.Component {
 
     getNodeEstimate = (nodeId) => {
         if (this.hasChildren(nodeId)) {
-            return this.state.flatItemsMap[nodeId].item.children
+            const total = this.state.flatItemsMap[nodeId].item.children
                 .reduce((acc, children) => acc + this.getNodeEstimate(children.id), 0)
+
+            return total || string2minutes(this.state.details[nodeId].estimate)
         }
 
         if (this.state.details[nodeId].status) {
             return 0
         }
 
-        return parseInt(this.state.details[nodeId].estimate, 10) || 0
+        return string2minutes(this.state.details[nodeId].estimate) || 0
     }
 
     updateDetailsField = fieldName => (evt) => {
