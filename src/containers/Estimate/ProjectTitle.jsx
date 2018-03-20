@@ -7,6 +7,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import InputWithFocus from './InputWithFocus'
+import minutes from './utils/minutes'
 
 const styles = {}
 styles.show = {
@@ -34,10 +35,14 @@ styles.btnCancel = {
     border: '0px solid #fff',
     background: 'transparent',
 }
+styles.estimate = {
+    marginLeft: 30,
+}
 
 class ProjectTitle extends React.Component {
     static propTypes = {
         value: PropTypes.string.isRequired,
+        estimate: PropTypes.number.isRequired,
         onEditStart: PropTypes.func.isRequired,
         onEditEnd: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
@@ -102,6 +107,7 @@ class ProjectTitle extends React.Component {
                     style={styles.show}
                 >
                     {this.props.value}
+                    <small style={styles.estimate}>({minutes(this.props.estimate)})</small>
                 </h2>
             )
         }

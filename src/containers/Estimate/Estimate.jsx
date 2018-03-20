@@ -493,10 +493,14 @@ class Estimate extends React.Component {
         })
     }
 
-    getEstimate = (nodeId) => {
+    getTreeEstimate = tree => tree
+        .map(node => this.getNodeEstimate(node.id))
+        .reduce((a, b) => a + b, 0)
+
+    getNodeEstimate = (nodeId) => {
         if (this.hasChildren(nodeId)) {
             return this.state.flatItemsMap[nodeId].item.children
-                .reduce((acc, children) => acc + this.getEstimate(children.id), 0)
+                .reduce((acc, children) => acc + this.getNodeEstimate(children.id), 0)
         }
 
         if (this.state.details[nodeId].status) {
@@ -526,7 +530,7 @@ class Estimate extends React.Component {
             isEditable={this.state.isEditMode}
             isLeafNode={!this.hasChildren(item.id)}
             focusOn={this.state.focusOn}
-            estimate={this.getEstimate(item.id)}
+            estimate={this.getNodeEstimate(item.id)}
             isCollapsed={this.state.collapsedItems.indexOf(item.id) !== -1}
             onFocus={this.selectItem}
             onChange={this.updateItemDetails}
@@ -586,6 +590,7 @@ class Estimate extends React.Component {
                         <div style={styles.header}>
                             <ProjectTitle
                                 value={this.state.title}
+                                estimate={this.getTreeEstimate(this.state.items)}
                                 onEditStart={this.keyboardOff}
                                 onEditEnd={this.keyboardOn}
                                 onChange={this.changeTitle}
