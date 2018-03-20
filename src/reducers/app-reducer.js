@@ -1,6 +1,6 @@
 
 export const initialState = {
-    name: 'crarc',
+    name: 'discovery',
     isReady: false,
     settings: {},
 }

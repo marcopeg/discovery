@@ -76,7 +76,10 @@ class Estimate extends React.Component {
 
     componentWillMount () {
         setTimeout(() => loadFromBrowser(this))
-        this.saveInterval = setInterval(() => saveToBrowser(this), 1000)
+    }
+
+    componentDidUpdate () {
+        setTimeout(() => saveToBrowser(this))
     }
 
     componentDidMount () {

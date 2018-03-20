@@ -21,7 +21,6 @@ export const saveToBrowser = (ctx) => {
         activeItem,
         collapsedItems,
     } = ctx.state
-
     localStorage.setItem(getLocalStorageName(ctx), JSON.stringify({
         title,
         items,
@@ -63,8 +62,8 @@ export const updateProjectUrl = (ctx) => {
     setTimeout(() => {
         saveToBrowser(ctx)
         setTimeout(() => {
-            const baseUrl = window.location.href.split('/#/')[0]
-            window.location.href = `${baseUrl}/#/estimate/${getStorageName(ctx)}`
+            window.location.href = `/#/${getStorageName(ctx)}`
+            window.location.reload(true)
         })
     })
 }

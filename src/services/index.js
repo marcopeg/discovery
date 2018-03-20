@@ -8,7 +8,6 @@
 
 const services = [
     require('./location-service'),
-    require('./posts-service'),
 ]
 
 export const configServices = async (store, history) => {
