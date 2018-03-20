@@ -27,6 +27,13 @@ import {
     injectNewItem,
 } from './utils/new-items'
 
+import {
+    up as navigateUp,
+    down as navigateDown,
+    left as navigateLeft,
+    right as navigateRight,
+} from './utils/navigate'
+
 import { deleteActiveItem } from './utils/delete-item'
 
 import tree2array from './utils/tree2array'
@@ -150,13 +157,23 @@ class Estimate extends React.Component {
 
             switch (evt.key) {
                 case 'ArrowUp': {
-                    this.movePrev()
                     evt.preventDefault()
+                    navigateUp(this)
                     break
                 }
                 case 'ArrowDown': {
-                    this.moveNext()
                     evt.preventDefault()
+                    navigateDown(this)
+                    break
+                }
+                case 'ArrowLeft': {
+                    evt.preventDefault()
+                    navigateLeft(this)
+                    break
+                }
+                case 'ArrowRight': {
+                    evt.preventDefault()
+                    navigateRight(this)
                     break
                 }
                 case 'Enter': {
@@ -368,56 +385,6 @@ class Estimate extends React.Component {
                 [itemId]: details,
             },
         })
-    }
-
-    moveNext = () => {
-        const { flatItems } = this.state
-        let index = flatItems.indexOf(this.state.activeItem)
-        let nextIndex = null
-        let loopGuard = 0
-
-        if (index === -1) {
-            nextIndex = flatItems[0] // eslint-disable-line
-        } else if (flatItems[index + 1]) {
-            nextIndex = flatItems[index + 1]
-        }
-
-        while (loopGuard < 100 && this.isVisible(nextIndex) !== true) {
-            index = flatItems.indexOf(nextIndex)
-            if (index === -1) {
-                nextIndex = flatItems[0] // eslint-disable-line
-            } else if (flatItems[index + 1]) {
-                nextIndex = flatItems[index + 1]
-            }
-            loopGuard += 1
-        }
-
-        this.selectItem(nextIndex)
-    }
-
-    movePrev = () => {
-        const { flatItems, activeItem } = this.state
-        let nextIndex = null
-        let loopGuard = 0
-        let index = flatItems.indexOf(activeItem)
-
-        if (index === -1) {
-            nextIndex = flatItems[flatItems.length - 1] // eslint-disable-line
-        } else if (flatItems[index - 1]) {
-            nextIndex = flatItems[index - 1]
-        }
-
-        while (loopGuard < 100 && this.isVisible(nextIndex) !== true) {
-            index = flatItems.indexOf(nextIndex)
-            if (index === -1) {
-                nextIndex = flatItems[flatItems.length - 1] // eslint-disable-line
-            } else if (flatItems[index - 1]) {
-                nextIndex = flatItems[index - 1]
-            }
-            loopGuard += 1
-        }
-
-        this.selectItem(nextIndex)
     }
 
     toggleCollapse = (node) => {
