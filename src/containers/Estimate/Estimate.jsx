@@ -7,6 +7,7 @@
 *//* global document window */
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Nestable from 'react-nestable'
 
 import {
@@ -16,6 +17,7 @@ import {
     loadFromDisk,
     updateProjectUrl,
     exportCsv,
+    goToNewProject,
 } from './utils/storage'
 
 import tree2array from './utils/tree2array'
@@ -61,6 +63,10 @@ styles.nestableComponent = {
 }
 
 class Estimate extends React.Component {
+    static propTypes = {
+        match: PropTypes.any.isRequired, // eslint-disable-line
+    }
+
     state = {
         title: 'A new project...',
         items: [],
@@ -75,11 +81,18 @@ class Estimate extends React.Component {
     }
 
     componentWillMount () {
-        setTimeout(() => loadFromBrowser(this))
+        loadFromBrowser(this)
     }
 
-    componentDidUpdate () {
-        setTimeout(() => saveToBrowser(this))
+    componentDidUpdate (prevProps, prevState) {
+        if (prevProps.match.params.projectId !== this.props.match.params.projectId) {
+            loadFromBrowser(this)
+            return
+        }
+        if (prevState === this.state) {
+            return
+        }
+        saveToBrowser(this)
     }
 
     componentDidMount () {
@@ -181,13 +194,13 @@ class Estimate extends React.Component {
                         if (!confirm('Discard local changes and start a new project?')) {
                             return
                         }
-                        this.updateStateWithItems([], {
-                            title: 'New project',
-                            collapsedItems: [],
-                            details: {},
-                            activeItem: null,
-                            isEditMode: false,
-                        })
+                        // eslint-disable-next-line
+                        const pname = prompt('Enter project name:')
+                        if (pname) {
+                            goToNewProject(pname)
+                        } else {
+                            alert('Please set a name for the project!') // eslint-disable-line
+                        }
                     }
                     break
                 }
@@ -240,7 +253,10 @@ class Estimate extends React.Component {
 
     changeTitle = (title) => {
         this.setState({ title })
-        setTimeout(() => updateProjectUrl(this))
+        setTimeout(() => {
+            saveToBrowser(this)
+            setTimeout(() => updateProjectUrl(this))
+        })
     }
 
     addNewItem = () => {

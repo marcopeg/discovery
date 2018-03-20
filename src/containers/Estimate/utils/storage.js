@@ -9,11 +9,11 @@ export const getStorageName = ctx => hipenize(ctx.state.title)
 
 const getLocalStorageName = ctx => (
     ctx.props.match.params.projectId
-        ? `estimate-${ctx.props.match.params.projectId}`
-        : 'estimate-default'
+        ? `discovery-${ctx.props.match.params.projectId}`
+        : 'discovery-default'
 )
 
-export const saveToBrowser = (ctx) => {
+export const saveToBrowser = (ctx, forceTitle = false) => {
     const {
         title,
         items,
@@ -21,7 +21,12 @@ export const saveToBrowser = (ctx) => {
         activeItem,
         collapsedItems,
     } = ctx.state
-    localStorage.setItem(getLocalStorageName(ctx), JSON.stringify({
+
+    const key = forceTitle
+        ? `discovery-${hipenize(ctx.state.title)}`
+        : getLocalStorageName(ctx)
+
+    localStorage.setItem(key, JSON.stringify({
         title,
         items,
         details,
@@ -50,12 +55,29 @@ export const loadFromBrowser = (ctx) => {
             })
         } else {
             // eslint-disable-next-line
-            console.error('It was not possible to load items')
+            ctx.updateStateWithItems([], {
+                title: 'A new project', // backward compatibility
+                details: {},
+                activeItem: null,
+                collapsedItems: [],
+            })
         }
     } catch (err) {
         // eslint-disable-next-line
-        console.error('It was not possible to load items')
+        ctx.updateStateWithItems([], {
+            title: 'A new project', // backward compatibility
+            details: {},
+            activeItem: null,
+            collapsedItems: [],
+        })
     }
+}
+
+export const goToNewProject = (name) => {
+    setTimeout(() => {
+        window.location.href = `/#/${hipenize(name)}`
+        window.location.reload(true)
+    })
 }
 
 export const updateProjectUrl = (ctx) => {
@@ -87,25 +109,15 @@ export const saveToDisk = (ctx) => {
     }, getStorageName(ctx))
 }
 
-export const loadFromDisk = (ctx) => {
+export const loadFromDisk = () => {
     uploadJson()
         .then((doc) => {
-            const {
-                title,
-                items,
-                details,
-                activeItem,
-                collapsedItems,
-            } = doc
+            localStorage.setItem(`discovery-${hipenize(doc.title)}`, JSON.stringify(doc))
 
-            ctx.updateStateWithItems(items, {
-                title: title || 'A new project', // backward compatibility
-                details,
-                activeItem,
-                collapsedItems,
+            setTimeout(() => {
+                window.location.href = `/#/${hipenize(doc.title)}`
+                window.location.reload(true)
             })
-
-            updateProjectUrl(ctx)
         })
         .catch((err) => {
             alert('Errors loading the file') // eslint-disable-line
