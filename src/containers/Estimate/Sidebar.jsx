@@ -5,13 +5,10 @@ import Help from './Help'
 
 const styles = {}
 styles.wrapper = {
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    width: '30vw',
-    minWidth: 300,
-    overflow: 'auto',
-    borderLeft: '2px solid #666',
-    marginLeft: 5,
+    height: 'calc(100vh - 115px)',
 }
 styles.main = {
     padding: 5,
@@ -35,6 +32,7 @@ styles.notes = {
     padding: 10,
     borderRadius: 4,
     borderColor: '#666',
+    color: '#333',
 }
 
 const Sidebar = ({

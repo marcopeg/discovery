@@ -22,6 +22,7 @@ styles.shortcuts = {
     margin: 0,
     marginTop: 5,
     borderRadius: 4,
+    color: '#333',
 }
 
 class Help extends React.Component {

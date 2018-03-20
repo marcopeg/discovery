@@ -9,6 +9,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Nestable from 'react-nestable'
+import { Layout, Menu } from 'antd'
 
 import {
     loadFromBrowser,
@@ -32,7 +33,6 @@ import './estimate.css'
 const styles = {}
 styles.basics = {
     textAlign: 'left',
-    margin: 20,
     fontFamily: 'verdana',
 }
 styles.welcome = {
@@ -42,24 +42,64 @@ styles.welcome = {
     marginTop: 20,
     marginBottom: 20,
     padding: 20,
+    width: '100%',
 }
 styles.header = {
+    position: 'fixed',
+    top: 65,
+    width: '100vw',
+    height: 50,
     borderBottom: '2px solid black',
     marginBottom: 10,
     paddingBottom: 10,
+    background: '#fff',
+    padding: '5px 45px',
+    zIndex: 100,
 }
 styles.ui = {}
 styles.ui.wrapper = {
+    margin: '70px 28px',
     display: 'flex',
-    height: '70vh',
 }
 styles.ui.nestable = {
     flex: 1,
     display: 'flex',
-    overflow: 'auto',
 }
 styles.nestableComponent = {
     flex: '1',
+}
+styles.logo = {
+    float: 'left',
+    color: '#fff',
+    margin: 0,
+    fontWeight: 'normal',
+    fontSize: '14pt',
+    height: 60,
+    overflow: 'hidden',
+    marginRight: 50,
+}
+styles.layout = {}
+styles.layout.header = {
+    position: 'fixed',
+    width: '100%',
+    zIndex: 100,
+}
+styles.layout.content = {
+    background: '#fff',
+    marginTop: 65,
+}
+styles.layout.sider = {
+    display: 'flex',
+    flexDirection: 'column',
+    background: '#fff',
+    color: '#ddd',
+    position: 'fixed',
+    top: 115,
+    width: 450,
+    height: 'calc(100vh - 115px)',
+    overflow: 'auto',
+    right: 0,
+    borderLeft: '2px solid #666',
 }
 
 class Estimate extends React.Component {
@@ -497,33 +537,84 @@ class Estimate extends React.Component {
 
     render () {
         const { items } = this.state
+        const contentStyle = this.state.activeItem
+            ? { ...styles.layout.content, marginRight: styles.layout.sider.width }
+            : styles.layout.content
+
         return (
-            <div style={styles.basics}>
-                <div style={styles.header}>
-                    <ProjectTitle
-                        value={this.state.title}
-                        onEditStart={this.keyboardOff}
-                        onEditEnd={this.keyboardOn}
-                        onChange={this.changeTitle}
-                    />
-                </div>
-                {items.length ? null : (
-                    <div style={styles.welcome}>
-                        <p>Welcome to a new experience in discovering your requirements!</p>
-                        <p>Click "Add Item" (or just type "a") to add your first requirement.</p>
+            <Layout>
+                <Layout.Header
+                    style={styles.layout.header}
+                >
+                    <h1 style={styles.logo}>Discovery</h1>
+                    <Menu
+                        theme="dark"
+                        mode="horizontal"
+                        style={{ lineHeight: '64px' }}
+                        onClick={(e) => {
+                            switch (e.key) {
+                                case '1': {
+                                    this.addNewItem()
+                                    break
+                                }
+                                case '2': {
+                                    saveToDisk(this)
+                                    break
+                                }
+                                case '3': {
+                                    loadFromDisk(this)
+                                    break
+                                }
+                                case '4': {
+                                    exportCsv(this)
+                                    break
+                                }
+                                default: {} // eslint-disable-line
+                            }
+                        }}
+                    >
+                        <Menu.Item key="1">Add Item</Menu.Item>
+                        <Menu.Item key="2">Save Project</Menu.Item>
+                        <Menu.Item key="3">Open Project</Menu.Item>
+                        <Menu.Item key="4">Export CSV</Menu.Item>
+                    </Menu>
+                </Layout.Header>
+                <Layout.Content
+                    style={contentStyle}
+                >
+                    <div style={styles.basics}>
+                        <div style={styles.header}>
+                            <ProjectTitle
+                                value={this.state.title}
+                                onEditStart={this.keyboardOff}
+                                onEditEnd={this.keyboardOn}
+                                onChange={this.changeTitle}
+                            />
+                        </div>
+                        <div style={styles.ui.wrapper}>
+                            {items.length ? null : (
+                                <div style={styles.welcome}>
+                                    <p>Welcome to a new experience in discovering your requirements!</p>
+                                    <p>Click "Add Item" (or just type "a") to add your first requirement.</p>
+                                </div>
+                            )}
+                            <div style={styles.ui.nestable}>
+                                <Nestable
+                                    ref={(nestable) => { this.nestable = nestable }}
+                                    items={items}
+                                    renderItem={this.renderItem}
+                                    onChange={this.updateStateWithItems}
+                                    style={styles.nestableComponent}
+                                />
+                            </div>
+                        </div>
                     </div>
-                )}
-                <div style={styles.ui.wrapper}>
-                    <div style={styles.ui.nestable}>
-                        <Nestable
-                            ref={(nestable) => { this.nestable = nestable }}
-                            items={items}
-                            renderItem={this.renderItem}
-                            onChange={this.updateStateWithItems}
-                            style={styles.nestableComponent}
-                        />
-                    </div>
-                    {this.state.activeItem ? (
+                </Layout.Content>
+                {this.state.activeItem ? (
+                    <Layout.Sider
+                        style={styles.layout.sider}
+                        width={styles.layout.sider.width}
+                    >
                         <Sidebar
                             {...this.state.details[this.state.activeItem]}
                             id={this.state.activeItem}
@@ -531,14 +622,9 @@ class Estimate extends React.Component {
                             onEditStart={this.keyboardOff}
                             onEditEnd={this.keyboardOn}
                         />
-                    ) : null}
-                </div>
-                <hr />
-                <button onClick={this.addNewItem}>+ Add Item</button>
-                <button onClick={() => saveToDisk(this)}>Save Project</button>
-                <button onClick={() => loadFromDisk(this)}>Open Project</button>
-                <button onClick={() => exportCsv(this)}>Export CSV</button>
-            </div>
+                    </Layout.Sider>
+                ) : null}
+            </Layout>
         )
     }
 }

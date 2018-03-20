@@ -14,7 +14,7 @@
         "deploy": "rm -rf ./docs && yarn build && mv ./build ./docs && git add . && git commit -m 'deploy' && git push"
     },
     "dependencies": {
-        "antd": "^3.2.3",
+        "antd": "^3.3.1",
         "babel-cli": "^6.26.0",
         "babel-plugin-module-resolver": "^3.1.0",
         "babel-preset-env": "^1.6.1",
