@@ -260,7 +260,10 @@ class Estimate extends React.Component {
     }
 
     addNewItem = () => {
-        const id = Date.now()
+        const id = this.state.flatItems.length
+            ? Math.max(...this.state.flatItems) + 1
+            : 1
+
         const items = [
             ...this.state.items,
             { id },
