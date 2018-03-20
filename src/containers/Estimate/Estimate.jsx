@@ -31,7 +31,6 @@ import { deleteActiveItem } from './utils/delete-item'
 
 import tree2array from './utils/tree2array'
 import tree2object from './utils/tree2object'
-import treeDeleteNode from './utils/tree-delete-node'
 import EstimateItem from './EstimateItem'
 import ProjectTitle from './ProjectTitle'
 import Sidebar from './Sidebar'
