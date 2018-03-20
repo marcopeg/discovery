@@ -21,6 +21,12 @@ import {
     goToNewProject,
 } from './utils/storage'
 
+import {
+    tailNewItem,
+    appendNewItem,
+    injectNewItem,
+} from './utils/new-items'
+
 import tree2array from './utils/tree2array'
 import tree2object from './utils/tree2object'
 import treeDeleteNode from './utils/tree-delete-node'
@@ -153,8 +159,10 @@ class Estimate extends React.Component {
                     break
                 }
                 case 'Enter': {
-                    if (evt.altKey || evt.ctrlKey || evt.shiftKey) {
-                        this.addNewItem()
+                    if (evt.shiftKey) {
+                        appendNewItem(this)
+                    } else if (evt.altKey || evt.ctrlKey) {
+                        injectNewItem(this)
                     } else if (this.state.isEditMode === false && this.state.activeItem !== null) {
                         this.setState({
                             isEditMode: true,
@@ -165,7 +173,7 @@ class Estimate extends React.Component {
                             isEditMode: false,
                         })
                     } else {
-                        this.addNewItem()
+                        tailNewItem(this)
                     }
                     break
                 }
@@ -200,7 +208,7 @@ class Estimate extends React.Component {
                 case '+':
                 case 'a': {
                     if (!this.state.isEditMode) {
-                        this.addNewItem()
+                        tailNewItem(this)
                     }
                     break
                 }
@@ -313,29 +321,6 @@ class Estimate extends React.Component {
         setTimeout(() => {
             saveToBrowser(this)
             setTimeout(() => updateProjectUrl(this))
-        })
-    }
-
-    addNewItem = () => {
-        const id = this.state.flatItems.length
-            ? Math.max(...this.state.flatItems) + 1
-            : 1
-
-        const items = [
-            ...this.state.items,
-            { id },
-        ]
-        this.updateStateWithItems(items, {
-            activeItem: id,
-            isEditMode: true,
-            details: {
-                ...this.state.details,
-                [id]: {
-                    status: false,
-                    description: 'new item',
-                    estimate: 0,
-                },
-            },
         })
     }
 
@@ -558,7 +543,7 @@ class Estimate extends React.Component {
                         onClick={(e) => {
                             switch (e.key) {
                                 case '1': {
-                                    this.addNewItem()
+                                    tailNewItem(this)
                                     break
                                 }
                                 case '2': {
