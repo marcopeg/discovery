@@ -1,11 +1,12 @@
 /* global localStorage window document */
 
+import request from 'lib/request'
 import downloadJson from './download-json'
 import uploadJson from './upload-json'
 
 export const hipenize = str => str.replace(/ +/g, '-').toLowerCase()
 
-export const getStorageName = ctx => hipenize(ctx.state.title)
+export const getStorageName = ctx => `${hipenize(ctx.state.title)}-${ctx.props.projectId}`
 
 const getLocalStorageName = ctx => (
     ctx.props.match.params.projectId
@@ -13,7 +14,7 @@ const getLocalStorageName = ctx => (
         : 'discovery-default'
 )
 
-export const saveToBrowser = (ctx, forceTitle = false) => {
+export const saveToBrowser = (ctx) => {
     const {
         title,
         items,
@@ -22,11 +23,7 @@ export const saveToBrowser = (ctx, forceTitle = false) => {
         collapsedItems,
     } = ctx.state
 
-    const key = forceTitle
-        ? `discovery-${hipenize(ctx.state.title)}`
-        : getLocalStorageName(ctx)
-
-    localStorage.setItem(key, JSON.stringify({
+    localStorage.setItem(ctx.props.projectId, JSON.stringify({
         title,
         items,
         details,
@@ -37,7 +34,7 @@ export const saveToBrowser = (ctx, forceTitle = false) => {
 
 export const loadFromBrowser = (ctx) => {
     try {
-        const doc = JSON.parse(localStorage.getItem(getLocalStorageName(ctx)))
+        const doc = JSON.parse(localStorage.getItem(ctx.props.projectId))
         if (doc) {
             const {
                 title,
@@ -73,10 +70,37 @@ export const loadFromBrowser = (ctx) => {
     }
 }
 
-export const goToNewProject = (name) => {
+export const saveProject = async (ctx) => {
+    const {
+        title,
+        items,
+        details,
+        activeItem,
+        collapsedItems,
+    } = ctx.state
+
+    const res = await request(`https://api.myjson.com/bins/${ctx.props.projectId}`, {
+        method: 'PUT',
+        headers: {
+            'content-type': 'application/json; charset=utf-8',
+        },
+        body: JSON.stringify({
+            title,
+            items,
+            details,
+            activeItem,
+            collapsedItems,
+        }),
+    })
+    if (res.status !== 200) {
+        alert('the project was not saved') // eslint-disable-line
+    }
+}
+
+export const goToNewProject = () => {
     setTimeout(() => {
-        window.location.href = `/#/${hipenize(name)}`
-        window.location.reload(true)
+        const win = window.open('/', '_blank')
+        win.focus()
     })
 }
 
@@ -109,13 +133,13 @@ export const saveToDisk = (ctx) => {
     }, getStorageName(ctx))
 }
 
-export const loadFromDisk = () => {
+export const loadFromDisk = (ctx) => {
     uploadJson()
         .then((doc) => {
-            localStorage.setItem(`discovery-${hipenize(doc.title)}`, JSON.stringify(doc))
+            localStorage.setItem(ctx.props.projectId, JSON.stringify(doc))
 
             setTimeout(() => {
-                window.location.href = `/#/${hipenize(doc.title)}`
+                window.location.href = `/#/${ctx.props.projectId}`
                 window.location.reload(true)
             })
         })

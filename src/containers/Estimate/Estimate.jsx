@@ -20,6 +20,7 @@ import {
     updateProjectUrl,
     exportCsv,
     goToNewProject,
+    saveProject,
 } from './utils/storage'
 
 import {
@@ -51,7 +52,8 @@ import styles from './Estimate.styles'
 
 class Estimate extends React.Component {
     static propTypes = {
-        match: PropTypes.any.isRequired, // eslint-disable-line
+        projectId: PropTypes.string.isRequired,
+        // match: PropTypes.any.isRequired, // eslint-disable-line
     }
 
     state = {
@@ -72,7 +74,7 @@ class Estimate extends React.Component {
     }
 
     componentDidUpdate (prevProps, prevState) {
-        if (prevProps.match.params.projectId !== this.props.match.params.projectId) {
+        if (prevProps.projectId !== this.props.projectId) {
             loadFromBrowser(this)
             return
         }
@@ -181,7 +183,7 @@ class Estimate extends React.Component {
                 }
                 case 's': {
                     if (!this.state.isEditMode) {
-                        saveToDisk(this)
+                        saveProject(this)
                     }
                     break
                 }
@@ -194,16 +196,10 @@ class Estimate extends React.Component {
                 case 'n': {
                     if (!this.state.isEditMode) {
                         // eslint-disable-next-line
-                        if (!confirm('Discard local changes and start a new project?')) {
+                        if (!confirm('Do you want to create a new project?')) {
                             return
                         }
-                        // eslint-disable-next-line
-                        const pname = prompt('Enter project name:')
-                        if (pname) {
-                            goToNewProject(pname)
-                        } else {
-                            alert('Please set a name for the project!') // eslint-disable-line
-                        }
+                        goToNewProject()
                     }
                     break
                 }
@@ -408,7 +404,7 @@ class Estimate extends React.Component {
                                     break
                                 }
                                 case '3': {
-                                    saveToDisk(this)
+                                    saveProject(this)
                                     break
                                 }
                                 case '4': {
@@ -416,6 +412,10 @@ class Estimate extends React.Component {
                                     break
                                 }
                                 case '5': {
+                                    saveToDisk(this)
+                                    break
+                                }
+                                case '6': {
                                     exportCsv(this)
                                     break
                                 }
@@ -426,8 +426,9 @@ class Estimate extends React.Component {
                         <Menu.Item key="1" alt="add item"><Icon type="plus-square" /> New Item</Menu.Item>
                         <Menu.Item key="2" alt="add item"><Icon type="check" /> Archive Completed</Menu.Item>
                         <Menu.Item key="3"><Icon type="save" /> Save Project</Menu.Item>
-                        <Menu.Item key="4"><Icon type="folder-open" /> Open Project</Menu.Item>
-                        <Menu.Item key="5"><Icon type="download" /> Export CSV</Menu.Item>
+                        <Menu.Item key="4"><Icon type="upload" /> Import Project</Menu.Item>
+                        <Menu.Item key="5"><Icon type="download" /> Export JSON</Menu.Item>
+                        <Menu.Item key="6"><Icon type="download" /> Export CSV</Menu.Item>
                     </Menu>
                 </Layout.Sider>
                 <Layout.Content
