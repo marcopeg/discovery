@@ -11,17 +11,24 @@ import minutes from './utils/minutes'
 
 const styles = {}
 styles.show = {
+    marginTop: 5,
     marginBottom: 0,
     fontWeight: 'normal',
+}
+styles.form = {
+    marginTop: 20,
 }
 styles.input = {
     fontFamily: 'verdana',
     marginRight: 5,
-    fontSize: '24px',
+    fontSize: '16px',
     outline: 'none',
-    border: '0px solid #fff',
+    border: '1px solid #ddd',
+    borderRadius: 4,
     margin: 0,
-    padding: 0,
+    padding: '2px 5px',
+    marginBottom: 5,
+    width: '20vw',
 }
 styles.btn = {
     display: 'inline-block',
@@ -35,9 +42,7 @@ styles.btnCancel = {
     border: '0px solid #fff',
     background: 'transparent',
 }
-styles.estimate = {
-    marginLeft: 30,
-}
+styles.estimate = {}
 
 class ProjectTitle extends React.Component {
     static propTypes = {
@@ -102,18 +107,20 @@ class ProjectTitle extends React.Component {
     render () {
         if (!this.state.isEditMode) {
             return (
-                <h2
-                    onClick={this.startEdit}
-                    style={styles.show}
-                >
-                    {this.props.value}
-                    <small style={styles.estimate}>({minutes(this.props.estimate)})</small>
-                </h2>
+                <div>
+                    <h2
+                        onClick={this.startEdit}
+                        style={styles.show}
+                    >
+                        {this.props.value}
+                    </h2>
+                    <small style={styles.estimate}>Estimated: {minutes(this.props.estimate)}</small>
+                </div>
             )
         }
 
         return (
-            <div>
+            <div style={styles.form}>
                 <InputWithFocus
                     hasFocus
                     value={this.state.value}

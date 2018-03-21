@@ -8,7 +8,7 @@ styles.wrapper = {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    height: 'calc(100vh - 115px)',
+    height: 'calc(100vh - 80px)',
 }
 styles.main = {
     padding: 5,

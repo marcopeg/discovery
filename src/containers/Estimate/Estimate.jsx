@@ -46,78 +46,7 @@ import ProjectTitle from './ProjectTitle'
 import Sidebar from './Sidebar'
 
 import './estimate.css'
-
-const styles = {}
-styles.basics = {
-    textAlign: 'left',
-    fontFamily: 'verdana',
-}
-styles.welcome = {
-    border: '1px solid #47bde8',
-    background: '#afe4ff',
-    borderRadius: 4,
-    marginTop: 20,
-    marginBottom: 20,
-    padding: 20,
-    width: '100%',
-}
-styles.header = {
-    position: 'fixed',
-    top: 65,
-    width: '100vw',
-    height: 50,
-    borderBottom: '2px solid black',
-    marginBottom: 10,
-    paddingBottom: 10,
-    background: '#fff',
-    padding: '5px 45px',
-    zIndex: 100,
-}
-styles.ui = {}
-styles.ui.wrapper = {
-    margin: '70px 28px',
-    display: 'flex',
-}
-styles.ui.nestable = {
-    flex: 1,
-    display: 'flex',
-}
-styles.nestableComponent = {
-    flex: '1',
-}
-styles.logo = {
-    float: 'left',
-    color: '#fff',
-    margin: 0,
-    fontWeight: 'normal',
-    fontSize: '14pt',
-    height: 60,
-    overflow: 'hidden',
-    marginRight: 50,
-}
-styles.layout = {}
-styles.layout.header = {
-    position: 'fixed',
-    width: '100%',
-    zIndex: 100,
-}
-styles.layout.content = {
-    background: '#fff',
-    marginTop: 65,
-}
-styles.layout.sider = {
-    display: 'flex',
-    flexDirection: 'column',
-    background: '#fff',
-    color: '#ddd',
-    position: 'fixed',
-    top: 115,
-    width: 450,
-    height: 'calc(100vh - 115px)',
-    overflow: 'auto',
-    right: 0,
-    borderLeft: '2px solid #666',
-}
+import styles from './Estimate.styles'
 
 class Estimate extends React.Component {
     static propTypes = {
@@ -475,8 +404,8 @@ class Estimate extends React.Component {
 
         return (
             <Layout>
-                <Layout.Header
-                    style={styles.layout.header}
+                <Layout.Sider
+                    style={styles.layout.leftSider}
                 >
                     <h1 style={styles.logo}>Discovery</h1>
                     <Menu
@@ -506,7 +435,7 @@ class Estimate extends React.Component {
                                     exportCsv(this)
                                     break
                                 }
-                                default: {} // eslint-disable-line
+                                default: { } // eslint-disable-line
                             }
                         }}
                     >
@@ -516,7 +445,7 @@ class Estimate extends React.Component {
                         <Menu.Item key="4"><Icon type="folder-open" /> Open Project</Menu.Item>
                         <Menu.Item key="5"><Icon type="download" /> Export CSV</Menu.Item>
                     </Menu>
-                </Layout.Header>
+                </Layout.Sider>
                 <Layout.Content
                     style={contentStyle}
                 >
