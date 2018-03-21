@@ -31,6 +31,12 @@ class EstimateItemNode extends React.Component {
         estimate: null,
     }
 
+    toggleCollapse = (evt) => {
+        evt.preventDefault()
+        evt.stopPropagation()
+        this.props.onToggleCollapse()
+    }
+
     render () {
         const status = this.props.isCollapsed
             ? '+ '
@@ -41,7 +47,7 @@ class EstimateItemNode extends React.Component {
             : (
                 <div>
                     <span style={{ float: 'right', background: '#ddd' }}>{minutes(this.props.estimate)}</span>
-                    <span onClick={this.props.onToggleCollapse}>{status}</span>
+                    <span onClick={this.toggleCollapse}>{status}</span>
                     {this.props.details.description}
                 </div>
             )

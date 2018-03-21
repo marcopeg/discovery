@@ -30,6 +30,12 @@ class EstimateItemLeaf extends React.Component {
         estimate: null,
     }
 
+    toggleStatus = (evt) => {
+        evt.preventDefault()
+        evt.stopPropagation()
+        this.props.onToggleStatus()
+    }
+
     render () {
         const status = this.props.details.status
             ? '[x] '
@@ -40,7 +46,7 @@ class EstimateItemLeaf extends React.Component {
             : (
                 <div>
                     <span style={{ float: 'right' }}>{minutes(this.props.estimate)}</span>
-                    <span onClick={this.props.onToggleStatus}>{status}</span>
+                    <span onClick={this.toggleStatus}>{status}</span>
                     {this.props.details.description}
                 </div>
             )

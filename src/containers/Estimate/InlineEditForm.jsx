@@ -30,6 +30,13 @@ styles.estimate = {
     width: 50,
     textAlign: 'right',
 }
+styles.label = {
+    marginRight: 2,
+}
+styles.label2 = {
+    ...styles.label,
+    marginLeft: 10,
+}
 
 class InlineEditForm extends React.Component {
     static propTypes = {
@@ -83,6 +90,7 @@ class InlineEditForm extends React.Component {
     render () {
         return (
             <div style={styles.wrapper}>
+                <span style={styles.label}>task:</span>
                 <InputWithFocus
                     hasFocus={this.props.focusOn === 'description'}
                     value={this.state.details.description}
@@ -90,6 +98,7 @@ class InlineEditForm extends React.Component {
                     onCancel={() => { }}
                     style={styles.description}
                 />
+                <span style={styles.label2}>estimate:</span>
                 <InputWithFocus
                     hasFocus={this.props.focusOn === 'estimate'}
                     value={this.state.details.estimate}
