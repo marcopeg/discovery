@@ -20,8 +20,10 @@ export const archiveCompleted = (ctx) => {
             
             // subtree node
             } else if (children) {
+                const prevLength = children.length
                 children = check([ ...children ])
-                if (!children.length) {
+
+                if (!children.length && prevLength > 0) {
                     details[node.id].status = true
                     keep = false
                 }
