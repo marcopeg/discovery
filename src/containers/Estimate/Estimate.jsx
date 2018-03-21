@@ -253,13 +253,7 @@ class Estimate extends React.Component {
         setTimeout(() => this.nestable.collapse(this.state.collapsedItems))
     }
 
-    changeTitle = (title) => {
-        this.setState({ title })
-        setTimeout(() => {
-            saveToBrowser(this)
-            setTimeout(() => updateProjectUrl(this))
-        })
-    }
+    changeTitle = title => this.setState({ title })
 
     hasChildren = (nodeId) => {
         const node = this.state.flatItemsMap[nodeId]
