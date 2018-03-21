@@ -133,20 +133,37 @@ export const saveToDisk = (ctx) => {
     }, getStorageName(ctx))
 }
 
-export const loadFromDisk = (ctx) => {
-    uploadJson()
-        .then((doc) => {
-            localStorage.setItem(ctx.props.projectId, JSON.stringify(doc))
+export const loadFromDisk = async (ctx) => {
+    try {
+        const doc = await uploadJson()
 
-            setTimeout(() => {
-                window.location.href = `/#/${ctx.props.projectId}`
-                window.location.reload(true)
-            })
+        // eslint-disable-next-line
+        if (!confirm('Confirm you want to replace the current project with the one you uploaded?')) {
+            return
+        }
+
+        localStorage.setItem(ctx.props.projectId, JSON.stringify(doc))
+
+        const {
+            title,
+            items,
+            details,
+            activeItem,
+            collapsedItems,
+        } = doc
+
+        ctx.updateStateWithItems(items, {
+            title: title || 'A new project', // backward compatibility
+            details,
+            activeItem,
+            collapsedItems,
         })
-        .catch((err) => {
-            alert('Errors loading the file') // eslint-disable-line
-            console.error(err) // eslint-disable-line
-        })
+
+        await saveProject(ctx)
+    } catch (err) {
+        alert('Errors loading the file') // eslint-disable-line
+        console.error(err) // eslint-disable-line
+    }
 }
 
 const str2csv = str => [

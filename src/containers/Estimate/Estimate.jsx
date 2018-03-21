@@ -243,12 +243,15 @@ class Estimate extends React.Component {
         keyboardEvents: true,
     })
 
-    updateStateWithItems = (items, state = {}) => this.setState({
-        ...state,
-        items,
-        flatItems: tree2array(items),
-        flatItemsMap: tree2object(items),
-    })
+    updateStateWithItems = (items, state = {}) => {
+        this.setState({
+            ...state,
+            items,
+            flatItems: tree2array(items),
+            flatItemsMap: tree2object(items),
+        })
+        setTimeout(() => this.nestable.collapse(this.state.collapsedItems))
+    }
 
     changeTitle = (title) => {
         this.setState({ title })
