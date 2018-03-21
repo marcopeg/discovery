@@ -7,8 +7,8 @@ import { createStore } from './boot/store'
 import Root from './boot/Root'
 import './index.css'
 
-const history = createHistory()
-const { store, isReady } = createStore(history, window.REDUX_INITIAL_STATE || {})
+export const history = createHistory()
+export const { store, isReady } = createStore(history, window.REDUX_INITIAL_STATE || {})
 
 isReady
     .then(() => render(<Root store={store} history={history} />, document.getElementById('root')))
