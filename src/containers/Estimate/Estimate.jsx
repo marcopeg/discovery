@@ -9,7 +9,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Nestable from 'react-nestable'
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Icon } from 'antd'
 
 import {
     loadFromBrowser,
@@ -36,6 +36,7 @@ import {
 
 import { string2minutes } from './utils/minutes'
 
+import { archiveCompleted } from './utils/archive-completed'
 import { deleteActiveItem } from './utils/delete-item'
 
 import tree2array from './utils/tree2array'
@@ -479,6 +480,7 @@ class Estimate extends React.Component {
                 >
                     <h1 style={styles.logo}>Discovery</h1>
                     <Menu
+                        selectable={false}
                         theme="dark"
                         mode="horizontal"
                         style={{ lineHeight: '64px' }}
@@ -489,14 +491,18 @@ class Estimate extends React.Component {
                                     break
                                 }
                                 case '2': {
-                                    saveToDisk(this)
+                                    archiveCompleted(this)
                                     break
                                 }
                                 case '3': {
-                                    loadFromDisk(this)
+                                    saveToDisk(this)
                                     break
                                 }
                                 case '4': {
+                                    loadFromDisk(this)
+                                    break
+                                }
+                                case '5': {
                                     exportCsv(this)
                                     break
                                 }
@@ -504,10 +510,11 @@ class Estimate extends React.Component {
                             }
                         }}
                     >
-                        <Menu.Item key="1">Add Item</Menu.Item>
-                        <Menu.Item key="2">Save Project</Menu.Item>
-                        <Menu.Item key="3">Open Project</Menu.Item>
-                        <Menu.Item key="4">Export CSV</Menu.Item>
+                        <Menu.Item key="1" alt="add item"><Icon type="plus-square" /> New Item</Menu.Item>
+                        <Menu.Item key="2" alt="add item"><Icon type="check" /> Archive Completed</Menu.Item>
+                        <Menu.Item key="3"><Icon type="save" /> Save Project</Menu.Item>
+                        <Menu.Item key="4"><Icon type="folder-open" /> Open Project</Menu.Item>
+                        <Menu.Item key="5"><Icon type="download" /> Export CSV</Menu.Item>
                     </Menu>
                 </Layout.Header>
                 <Layout.Content

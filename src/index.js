@@ -1,7 +1,7 @@
 /* global document window */
 
 import React from 'react'
-import { hydrate } from 'react-dom'
+import { render } from 'react-dom'
 import createHistory from 'history/createHashHistory'
 import { createStore } from './boot/store'
 import Root from './boot/Root'
@@ -11,7 +11,7 @@ const history = createHistory()
 const { store, isReady } = createStore(history, window.REDUX_INITIAL_STATE || {})
 
 isReady
-    .then(() => hydrate(<Root store={store} history={history} />, document.getElementById('root')))
+    .then(() => render(<Root store={store} history={history} />, document.getElementById('root')))
     .catch((err) => {
         document.body.innerHTML = err ? err.message : 'unknown error'
         console.error(err) // eslint-disable-line
