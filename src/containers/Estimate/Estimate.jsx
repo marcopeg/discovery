@@ -4,6 +4,7 @@
         no-unused-expressions: off,
         react/sort-comp: off,
         no-restricted-syntax: off,
+        react/jsx-curly-brace-presence: off,
 *//* global document window */
 
 import React from 'react'
@@ -206,23 +207,6 @@ class Estimate extends React.Component {
                     }
                     break
                 }
-                // case 'u': {
-                //     // eslint-disable-next-line
-                //     if (!confirm('Sure you want to reset items ids?')) { return }
-                //     let id = 0
-                //     const details = {}
-                //     const { items } = this.state
-                //     const change = nodes => nodes.map((node) => {
-                //         id += 1
-                //         details[id] = { ...this.state.details[node.id] }
-                //         node.id = id // eslint-disable-line
-                //         if (node.children) { change(node.children) }
-                //         return node
-                //     })
-                //     change(items)
-                //     this.updateStateWithItems([ ...items ], { details, collapsedItems: [] })
-                //     break
-                // }
                 default: {
                     // console.log(evt.key) // eslint-disable-line
                 } // eslint-disable-line
@@ -462,8 +446,8 @@ class Estimate extends React.Component {
                         <div style={styles.ui.wrapper}>
                             {items.length ? null : (
                                 <div style={styles.welcome}>
-                                    <p>Welcome to a new experience in discovering your requirements!</p>
-                                    <p>Click "Add Item" (or just type "a") to add your first requirement.</p>
+                                    <p>{'Welcome to a new experience in discovering your requirements!'}</p>
+                                    <p>{'Click "Add Item" (or just type "a") to add your first requirement.'}</p>
                                 </div>
                             )}
                             <div style={styles.ui.nestable}>

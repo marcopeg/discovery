@@ -17,7 +17,7 @@ export const archiveCompleted = (ctx) => {
             // leaf node
             if (item.status === true) {
                 keep = false
-            
+
             // subtree node
             } else if (children) {
                 const prevLength = children.length

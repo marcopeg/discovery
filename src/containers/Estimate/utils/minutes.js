@@ -85,7 +85,7 @@ export const minutes2string = (value) => {
 
         return min
             ? `${hours2str(hours)} ${mins2str(min)}`
-            : `${mins2str(min)}`
+            : `${hours2str(hours)}`
     }
 
     return `${mins2str(value)}`
