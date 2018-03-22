@@ -355,11 +355,22 @@ class Estimate extends React.Component {
         })
     }
 
+    isCompleted = (item) => {
+        if (!item.children || !item.children.length) {
+            return this.state.details[item.id].status
+        }
+        if (item.children) {
+            return item.children.every(i => this.isCompleted(i))
+        }
+        return false
+    }
+
     renderItem = ({ item }) => (
         <EstimateItem
             id={item.id}
             details={this.state.details[item.id]}
             isActive={item.id === this.state.activeItem}
+            isCompleted={this.isCompleted(item)}
             isEditable={this.state.isEditMode}
             isLeafNode={!this.hasChildren(item.id)}
             focusOn={this.state.focusOn}

@@ -47,10 +47,10 @@ const EstimateItem = (props) => {
             onClick={() => props.onFocus(props.id)}
             style={
                 props.isActive
-                    ? props.details.status
+                    ? props.isCompleted
                         ? styles.activeAndCompleted
                         : styles.active
-                    : props.details.status
+                    : props.isCompleted
                         ? styles.completed
                         : styles.normal
             }
@@ -64,6 +64,7 @@ EstimateItem.propTypes = {
     id: PropTypes.number.isRequired,
     isLeafNode: PropTypes.bool.isRequired,
     isActive: PropTypes.bool.isRequired,
+    isCompleted: PropTypes.bool.isRequired,
     onFocus: PropTypes.func.isRequired,
     details: PropTypes.shape({
         status: PropTypes.bool.isRequired,
