@@ -1,5 +1,6 @@
 /* global localStorage window document */
 
+import { notification } from 'antd'
 import request from 'lib/request'
 import downloadJson from './download-json'
 import uploadJson from './upload-json'
@@ -79,21 +80,34 @@ export const saveProject = async (ctx) => {
         collapsedItems,
     } = ctx.state
 
-    const res = await request(`https://api.myjson.com/bins/${ctx.props.projectId}`, {
-        method: 'PUT',
-        headers: {
-            'content-type': 'application/json; charset=utf-8',
-        },
-        body: JSON.stringify({
-            title,
-            items,
-            details,
-            activeItem,
-            collapsedItems,
-        }),
-    })
-    if (res.status !== 200) {
-        alert('the project was not saved') // eslint-disable-line
+    try {
+        const res = await request(`https://api.myjson.com/bins/${ctx.props.projectId}`, {
+            method: 'PUT',
+            headers: {
+                'content-type': 'application/json; charset=utf-8',
+            },
+            body: JSON.stringify({
+                title,
+                items,
+                details,
+                activeItem,
+                collapsedItems,
+            }),
+        })
+        if (res.status !== 200) {
+            notification.error({
+                message: 'The project is NOT saved!',
+                description: res.statusText,
+            })
+            return
+        }
+
+        notification.success({ message: 'project saved' })
+    } catch (err) {
+        notification.error({
+            message: 'The project is NOT saved!',
+            description: err.message,
+        })
     }
 }
 

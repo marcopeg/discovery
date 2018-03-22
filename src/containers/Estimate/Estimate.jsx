@@ -53,7 +53,6 @@ import styles from './Estimate.styles'
 class Estimate extends React.Component {
     static propTypes = {
         projectId: PropTypes.string.isRequired,
-        // match: PropTypes.any.isRequired, // eslint-disable-line
     }
 
     state = {
