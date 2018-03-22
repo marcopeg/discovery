@@ -9,13 +9,7 @@ export const hipenize = str => str.replace(/ +/g, '-').toLowerCase()
 
 export const getStorageName = ctx => `${hipenize(ctx.state.title)}-${ctx.props.projectId}`
 
-const getLocalStorageName = ctx => (
-    ctx.props.match.params.projectId
-        ? `discovery-${ctx.props.match.params.projectId}`
-        : 'discovery-default'
-)
-
-export const saveToBrowser = (ctx) => {
+const getSerializableDoc = (ctx) => {
     const {
         title,
         items,
@@ -24,13 +18,19 @@ export const saveToBrowser = (ctx) => {
         collapsedItems,
     } = ctx.state
 
-    localStorage.setItem(ctx.props.projectId, JSON.stringify({
+    return ({
         title,
         items,
         details,
         activeItem,
         collapsedItems,
-    }))
+        etag: Date.now(),
+    })
+}
+
+export const saveToBrowser = (ctx) => {
+    const data = JSON.stringify(getSerializableDoc(ctx))
+    localStorage.setItem(ctx.props.projectId, data)
 }
 
 export const loadFromBrowser = (ctx) => {
@@ -72,13 +72,8 @@ export const loadFromBrowser = (ctx) => {
 }
 
 export const saveProject = async (ctx) => {
-    const {
-        title,
-        items,
-        details,
-        activeItem,
-        collapsedItems,
-    } = ctx.state
+    saveToBrowser(ctx)
+    const body = JSON.stringify(getSerializableDoc(ctx))
 
     try {
         const res = await request(`https://api.myjson.com/bins/${ctx.props.projectId}`, {
@@ -86,13 +81,7 @@ export const saveProject = async (ctx) => {
             headers: {
                 'content-type': 'application/json; charset=utf-8',
             },
-            body: JSON.stringify({
-                title,
-                items,
-                details,
-                activeItem,
-                collapsedItems,
-            }),
+            body,
         })
         if (res.status !== 200) {
             notification.error({

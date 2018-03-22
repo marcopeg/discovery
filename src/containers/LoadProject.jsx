@@ -43,19 +43,17 @@ class InitProject extends React.Component {
             this.setState({ isReady: true })
             return
         }
-        
-        console.log('check project that exists in memory')
-        console.log(body)
 
-        if (
-            JSON.stringify(body) !== JSON.stringify(projectData) &&
-            confirm('The local copy of the project differs from the online. Do you want to use the online version?') // eslint-disable-line
-        ) {
-            localStorage.setItem(projectId, JSON.stringify(body))
-            window.location.reload(true)
-        }
-        // const tokens = body.uri.split('/')
-        // history.push(`/${tokens[tokens.length - 1]}`)
+        try {
+            if (
+                body.etag > projectData.etag &&
+                confirm('The local copy of the project differs from the online. Do you want to use the online version?') // eslint-disable-line
+            ) {
+                localStorage.setItem(projectId, JSON.stringify(body))
+                window.location.reload(true)
+            }
+        } catch(e) {} // eslint-disable-line
+
     }
 
     render () {
