@@ -11,13 +11,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Nestable from 'react-nestable'
 import { Layout, Menu, Icon } from 'antd'
+import { Helmet } from 'react-helmet'
 
 import {
     loadFromBrowser,
     saveToBrowser,
     saveToDisk,
     loadFromDisk,
-    updateProjectUrl,
     exportCsv,
     goToNewProject,
     saveProject,
@@ -380,6 +380,9 @@ class Estimate extends React.Component {
 
         return (
             <Layout>
+                <Helmet>
+                    <title>{this.state.title} | Discovery</title>
+                </Helmet>
                 <Layout.Sider
                     style={styles.layout.leftSider}
                 >
