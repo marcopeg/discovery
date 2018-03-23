@@ -55,6 +55,7 @@ class InlineEditForm extends React.Component {
         focusOn: PropTypes.string,
         onChange: PropTypes.func.isRequired,
         onEditEnd: PropTypes.func.isRequired,
+        onFieldFocus: PropTypes.func.isRequired,
     }
 
     static defaultProps = {
@@ -97,6 +98,7 @@ class InlineEditForm extends React.Component {
                 <span style={styles.label}>task:</span>
                 <InputWithFocus
                     hasFocus={this.props.focusOn === 'description'}
+                    onFocus={() => this.props.onFieldFocus('description')}
                     value={this.state.details.description}
                     onChange={this.updateDescription}
                     onCancel={() => { }}
@@ -105,6 +107,7 @@ class InlineEditForm extends React.Component {
                 <span style={styles.label2}>estimate:</span>
                 <InputWithFocus
                     hasFocus={this.props.focusOn === 'estimate'}
+                    onFocus={() => this.props.onFieldFocus('estimate')}
                     value={this.state.details.estimate}
                     onChange={this.updateEstimate}
                     style={styles.estimate}

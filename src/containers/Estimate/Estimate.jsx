@@ -397,6 +397,7 @@ class Estimate extends React.Component {
             onChange={this.updateItemDetails}
             onToggleCollapse={() => this.toggleCollapse(item)}
             onToggleStatus={() => this.toggleStatus(item)}
+            onFieldFocus={focusOn => this.setState({ focusOn })}
         />
     )
 
