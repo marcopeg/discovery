@@ -37,6 +37,9 @@ styles.label2 = {
     ...styles.label,
     marginLeft: 10,
 }
+styles.submit = {
+    marginLeft: 5,
+}
 
 class InlineEditForm extends React.Component {
     static propTypes = {
@@ -51,6 +54,7 @@ class InlineEditForm extends React.Component {
         }).isRequired,
         focusOn: PropTypes.string,
         onChange: PropTypes.func.isRequired,
+        onEditEnd: PropTypes.func.isRequired,
     }
 
     static defaultProps = {
@@ -105,6 +109,16 @@ class InlineEditForm extends React.Component {
                     onChange={this.updateEstimate}
                     style={styles.estimate}
                 />
+                <button
+                    onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        this.props.onEditEnd(this.props.id)
+                    }}
+                    style={styles.submit}
+                >
+                    Ok
+                </button>
             </div>
         )
     }

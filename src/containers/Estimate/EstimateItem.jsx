@@ -10,33 +10,6 @@ import PropTypes from 'prop-types'
 import EstimateItemLeaf from './EstimateItemLeaf'
 import EstimateItemNode from './EstimateItemNode'
 
-const styles = {}
-styles.basics = {
-    border: '1px solid transparent',
-    padding: '2px 5px',
-}
-styles.normal = {
-    ...styles.basics,
-    borderBottom: '1px dotted #ddd',
-}
-styles.active = {
-    ...styles.basics,
-    border: '1px solid #47bde8',
-    background: '#afe4ff',
-    borderRadius: 4,
-}
-styles.completed = {
-    ...styles.normal,
-    background: '#d3ead4',
-    borderRadius: 4,
-    borderColor: '#badbbb',
-}
-styles.activeAndCompleted = {
-    ...styles.active,
-    background: '#d3ead4',
-    borderColor: 'green',
-}
-
 const EstimateItem = (props) => {
     const content = props.isLeafNode
         ? <EstimateItemLeaf {...props} />
@@ -45,14 +18,14 @@ const EstimateItem = (props) => {
     return (
         <div
             onClick={() => props.onFocus(props.id)}
-            style={
+            className={
                 props.isActive
                     ? props.isCompleted
-                        ? styles.activeAndCompleted
-                        : styles.active
+                        ? 'estimate-row estimate-row--active-completed'
+                        : 'estimate-row estimate-row--active'
                     : props.isCompleted
-                        ? styles.completed
-                        : styles.normal
+                        ? 'estimate-row estimate-row--completed'
+                        : 'estimate-row estimate-row--normar'
             }
         >
             {content}
@@ -65,7 +38,9 @@ EstimateItem.propTypes = {
     isLeafNode: PropTypes.bool.isRequired,
     isActive: PropTypes.bool.isRequired,
     isCompleted: PropTypes.bool.isRequired,
+    isEditable: PropTypes.bool.isRequired,
     onFocus: PropTypes.func.isRequired,
+    onEdit: PropTypes.func.isRequired,
     details: PropTypes.shape({
         status: PropTypes.bool.isRequired,
     }).isRequired,

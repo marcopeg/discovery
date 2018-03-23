@@ -290,6 +290,21 @@ class Estimate extends React.Component {
         }
     }
 
+    editItem = (itemId) => {
+        this.setState({
+            isEditMode: true,
+            focusOn: 'description',
+        })
+        this.selectItem(itemId)
+    }
+
+    editItemEnd = () => {
+        console.log('END')
+        this.setState({
+            isEditMode: false,
+        })
+    }
+
     updateItemDetails = (itemId, details) => {
         this.setState({
             details: {
@@ -377,6 +392,8 @@ class Estimate extends React.Component {
             estimate={this.getNodeEstimate(item.id)}
             isCollapsed={this.state.collapsedItems.indexOf(item.id) !== -1}
             onFocus={this.selectItem}
+            onEdit={this.editItem}
+            onEditEnd={this.editItemEnd}
             onChange={this.updateItemDetails}
             onToggleCollapse={() => this.toggleCollapse(item)}
             onToggleStatus={() => this.toggleStatus(item)}
