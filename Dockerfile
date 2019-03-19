@@ -21,6 +21,5 @@ WORKDIR /usr/src/app
 RUN yarn build
 
 # Start
-ENV NODE_ENV production
-ENV SSR true
-ENTRYPOINT [ "node", "ssr.js" ]
+# CMD [ "yarn", "start:prod" ]
+CMD exec /usr/src/app/node_modules/.bin/http-server -p 3000 ./build

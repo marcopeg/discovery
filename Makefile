@@ -10,6 +10,7 @@ version:=$(shell node -p "require('./package.json').version")
 
 # Docker image tag name
 tag?=${organization}/${name}
+port?=3000
 
 # Build the project using cache
 image:
@@ -20,7 +21,9 @@ image:
 run:
 	docker run \
 		--rm \
+		--init \
 		--name ${name} \
+		-p ${port}:3000 \
 		${tag}
 
 stop:
