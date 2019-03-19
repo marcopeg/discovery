@@ -21,7 +21,6 @@ image:
 run:
 	docker run \
 		--rm \
-		--init \
 		--name ${name} \
 		-p ${port}:3000 \
 		${tag}
@@ -38,7 +37,7 @@ boot:
 	docker run \
 		-d \
 		--name ${name} \
-		-p 8080:8080 \
+		-p ${port}:3000 \
 		${name}
 
 down: stop remove
