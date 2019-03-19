@@ -22,7 +22,7 @@ run:
 	docker run \
 		--rm \
 		--name ${name} \
-		-p ${port}:3000 \
+		-p ${port}:80 \
 		${tag}
 
 stop:
@@ -37,7 +37,7 @@ boot:
 	docker run \
 		-d \
 		--name ${name} \
-		-p ${port}:3000 \
+		-p ${port}:80 \
 		${name}
 
 down: stop remove
