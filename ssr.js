@@ -108,3 +108,12 @@ app.use(express.static(path.resolve(__dirname, './build')))
 app.get('*', ssr)
 
 app.listen(PORT, () => winston.info(`[ssr] server running on ${PORT}`))
+
+
+/* eslint-disable */
+// Let Docker exit on Ctrl+C
+process.on('SIGINT', function() {
+    process.exit()
+})
+
+
