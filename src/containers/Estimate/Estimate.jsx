@@ -419,7 +419,7 @@ class Estimate extends React.Component {
                     <Menu
                         selectable={false}
                         theme="dark"
-                        mode="horizontal"
+                        // mode="horizontal"
                         style={{ lineHeight: '64px' }}
                         onClick={(e) => {
                             switch (e.key) {
@@ -452,8 +452,8 @@ class Estimate extends React.Component {
                         }}
                     >
                         <Menu.Item key="1" alt="add item"><Icon type="plus-square" /> New Item</Menu.Item>
-                        <Menu.Item key="2" alt="add item"><Icon type="check" /> Archive Completed</Menu.Item>
-                        <Menu.Item key="3"><Icon type="save" /> Save Project</Menu.Item>
+                        {/* <Menu.Item key="2" alt="add item"><Icon type="check" /> Archive Completed</Menu.Item> */}
+                        {/* <Menu.Item key="3"><Icon type="save" /> Save Project</Menu.Item> */}
                         <Menu.Item key="4"><Icon type="upload" /> Import Project</Menu.Item>
                         <Menu.Item key="5"><Icon type="download" /> Export JSON</Menu.Item>
                         <Menu.Item key="6"><Icon type="download" /> Export CSV</Menu.Item>

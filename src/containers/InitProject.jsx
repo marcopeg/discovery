@@ -4,27 +4,23 @@
 */
 
 import React from 'react'
-import request from 'lib/request'
+// import request from 'lib/request'
 import { history } from '../index'
 
 class InitProject extends React.Component {
     async componentDidMount () {
-        const res = await request('https://api.myjson.com/bins', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json; charset=utf-8',
-            },
-            body: JSON.stringify({
-                title: 'New Discovery Project',
-                items: [],
-                details: {},
-                activeItem: null,
-                collapsedItems: [],
-            }),
-        })
-        const body = await res.json()
-        const tokens = body.uri.split('/')
-        history.push(`/${tokens[tokens.length - 1]}`)
+        const projectId = `p${Date.now()}`
+        const projectData = {
+            title: 'New Discovery Project',
+            items: [],
+            details: {},
+            activeItem: null,
+            collapsedItems: [],
+            etag: Date.now(),
+        }
+
+        localStorage.setItem(projectId, JSON.stringify(projectData))
+        history.push(`/${projectId}`)
     }
 
     render () {

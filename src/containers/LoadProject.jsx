@@ -8,7 +8,6 @@
 */
 
 import React from 'react'
-import request from 'lib/request'
 import Estimate from 'containers/Estimate'
 import { history } from '../index'
 
@@ -17,43 +16,22 @@ class InitProject extends React.Component {
         isReady: false,
     }
 
-    async componentWillMount () {
+    async componentDidMount () {
         const { projectId } = this.props.match.params
-        let projectExists = false
-        let projectData = null
         try {
             const data = localStorage.getItem(projectId)
             if (data) {
-                projectData = JSON.parse(data)
-                projectExists = true
+                JSON.parse(data)
                 this.setState({ isReady: true })
+            } else {
+                throw new Error('project not found')
             }
         } catch (e) {
-            console.error('Project was removed')
+            alert('Project not found')
             console.error(e)
             localStorage.removeItem(projectId)
+            history.push(`/`)
         }
-
-        const res = await request(`https://api.myjson.com/bins/${projectId}`, {
-            method: 'GET',
-        })
-        const body = await res.json()
-        if (!projectExists) {
-            localStorage.setItem(projectId, JSON.stringify(body))
-            this.setState({ isReady: true })
-            return
-        }
-
-        try {
-            if (
-                body.etag > projectData.etag &&
-                confirm('The local copy of the project differs from the online. Do you want to use the online version?') // eslint-disable-line
-            ) {
-                localStorage.setItem(projectId, JSON.stringify(body))
-                window.location.reload(true)
-            }
-        } catch(e) {} // eslint-disable-line
-
     }
 
     render () {

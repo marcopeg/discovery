@@ -14,6 +14,8 @@ port?=3000
 
 # Build the project using cache
 image:
+	npm install
+	npm run build
 	docker build -t ${tag} -t ${tag}:${version} .
 	
 # Spins up a container from the latest available image
